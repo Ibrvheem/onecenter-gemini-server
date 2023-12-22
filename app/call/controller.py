@@ -72,7 +72,7 @@ def respond_to_call_in_progress():
             if confidence >= 0.7:
                 # Store Call Before Responding
                 history = Call.get_by_user_id_and_session_id(user.id, session_id)
-                answer = qa_chain(alternative.get('transcript'), history, partner)
+                answer = qa_chain(alternative.get('transcript'), history, partner, user)
                 Call.create(user.id, partner.id, session_id, alternative.get('transcript'), answer)
                 break
         if 'take care' in answer.lower() or 'bye' in answer.lower():
@@ -107,7 +107,7 @@ def respond_to_call_in_progress():
         partner = Partner.get_by_id(partner_id)
         user = User.get_by_id(user_id)
         history = Call.get_by_user_id_and_session_id(user.id, session_id)
-        answer = qa_chain(question, history, partner)
+        answer = qa_chain(question, history, partner, user)
         Call.create(user.id, partner.id, session_id, question, answer)
         return answer
 
